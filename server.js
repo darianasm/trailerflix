@@ -1,25 +1,39 @@
+require('dotenv').config();
 const express = require('express');
-const fs = require('node:fs');
-const path = require('node:path');
-const dotenv = require('dotenv');
-
-dotenv.config();
+const bodyParser = require('body-parser');
+const { leerTrailerflix, guardarTrailerflix } = require('./database/trailerflix.manager');
 
 const app = express();
 const PORT = process.env.PORT || 3008;
-const trailerflixPath = process.env.TRAILERFLIX_JSON_PATH || './database/trailerflix.json';
 
-const jsonPath = path.resolve(__dirname, trailerflixPath);
-const jsonData = fs.readFileSync(jsonPath, 'utf-8');
-const TRAILERFLIX = JSON.parse(jsonData);
+let CATALOGO = [];
 
-app.use(express.json());
+app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  CATALOGO = leerTrailerflix();
+  next();
+});
 
 app.get('/', (req, res) => {
   res.status(200).json({
     mensaje: 'Bienvenido a la API de TrailerFlix',
-    totalRegistros: Array.isArray(TRAILERFLIX) ? TRAILERFLIX.length : 0,
+    totalRegistros: CATALOGO.length,
   });
+});
+
+// app.get('/trailerflix', (req, res) => {});
+
+// app.get('/trailerflix/:id', (req, res) => {});
+
+// app.post('/trailerflix', (req, res) => {});
+
+// app.put('/trailerflix/:id', (req, res) => {});
+
+// app.delete('/trailerflix/:id', (req, res) => {});
+
+app.use((req, res) => {
+  res.status(404).json({ mensaje: 'Ruta no encontrada' });
 });
 
 app.listen(PORT, () => {
