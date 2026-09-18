@@ -1,0 +1,13 @@
+{
+  "name": "trailerflix",
+  "version": "1.0.0",
+  "description": "Estructura base de API REST con Node.js y Express",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "17.2.2",
+    "express": "5.1.0"
+  }
+}
