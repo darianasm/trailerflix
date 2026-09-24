@@ -1,1 +1,36 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "Inception",
+    "categoria": "Película",
+    "reparto": ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"],
+    "trailer": "https://www.youtube.com/watch?v=YoHD9XEInc0"
+  },
+  {
+    "id": 2,
+    "title": "The Matrix",
+    "categoria": "Película",
+    "reparto": ["Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss"],
+    "trailer": "https://www.youtube.com/watch?v=vKQi3bBA1y8"
+  },
+  {
+    "id": 3,
+    "title": "Breaking Bad",
+    "categoria": "Serie",
+    "reparto": ["Bryan Cranston", "Aaron Paul", "Anna Gunn"],
+    "trailer": "https://www.youtube.com/watch?v=HhesaQXLuRY"
+  },
+  {
+    "id": 4,
+    "title": "Interstellar",
+    "categoria": "Película",
+    "reparto": ["Matthew McConaughey", "Anne Hathaway", "Jessica Chastain"]
+  },
+  {
+    "id": 5,
+    "title": "Stranger Things",
+    "categoria": "Serie",
+    "reparto": ["Millie Bobby Brown", "Finn Wolfhard", "Winona Ryder"],
+    "trailer": "https://www.youtube.com/watch?v=b9EkMc79ZSU"
+  }
+]

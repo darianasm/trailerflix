@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const { leerTrailerflix, guardarTrailerflix } = require('./database/trailerflix.manager');
 
 const app = express();
+app.set('view engine', 'ejs');
 const PORT = process.env.PORT || 3008;
 
 let CATALOGO = [];
@@ -15,16 +16,6 @@ app.use((req, res, next) => {
   next();
 });
 
-function leerTrailerflix() {
-  try {
-    const peliculas = fs.readFileSync('trailerflix.json', 'utf-8');
-    const catalogo = JSON.parse(peliculas);
-    return catalogo;
-  } catch (error) {
-    console.error('Error al leer el archivo trailerflix.json:', error.message);
-    return [];
-  }
-}
 
 // 1. Función genérica de búsqueda
 function buscarEnCatalogo(propiedad, datoABuscar) {
@@ -76,12 +67,20 @@ app.get('/catalogo/titulo/:title', (req, res) => {
   }
 });
 
-// app.get('/categoria/:cat', (req, res) => {});
-/*
-Para el endpoint /categoria/:cat utiliza también .filter() y retorna todos los resultados encontrados.
-(Aquí son dos posibles valores solamente)
-*/
+app.get('/categoria/:cat', (req, res) => {
+  const categoriaBuscada = req.params.cat;
+  const resultados = buscarEnCatalogo("categoria", categoriaBuscada);
 
+  if (resultados.length > 0) {
+    console.log(`Se encontraron ${resultados.length} resultados para la categoría: ${categoriaBuscada}`);
+    return res.json(resultados);
+  } else {
+    console.log(`No se encontraron resultados para la categoría: ${categoriaBuscada}`);
+    return res.status(404).json({ 
+      mensaje: `No se encontraron resultados para la categoría: ${categoriaBuscada}` 
+    });
+  }
+});
 
 app.get('/reparto/:act', (req, res) => {
   const datosAux = buscarEnCatalogo("reparto", req.params.act);
@@ -111,7 +110,7 @@ app.get('/trailer/:id', (req, res) => {
     const resultado = {
       id: peliculaEncontrada.id,
       titulo: peliculaEncontrada.title, 
-      trailer: peliculaEncontrada?.trailer || null 
+      trailer: peliculaEncontrada?.trailer || `El trailer no se encuentra disponible para esta película/serie.`
     };
 
     console.log(`Se encontró la información para el ID: ${idBuscado}`);
@@ -123,11 +122,6 @@ app.get('/trailer/:id', (req, res) => {
     });
   }
 });
-/*
-Para el endpoint /trailer/:id debes retornar las propiedades “id”, “titulo”, “trailer”. (cuidado, porque
-no todas las películas/series poseen la propiedad tráiler, por lo tanto debes aplicar el operador de
-acceso condicional {objeto?.trailer})
-*/
 
 app.use((req, res) => {
   res.status(404).json({ mensaje: 'Ruta no encontrada' });
