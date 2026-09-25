@@ -4,7 +4,7 @@
   "description": "Estructura base de API REST con Node.js y Express",
   "main": "server.js",
   "scripts": {
-  "start": "nodemon index.js"
+  "start": "nodemon server.js"
   },
   "dependencies": {
     "body-parser": "^2.3.0",

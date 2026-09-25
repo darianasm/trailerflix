@@ -1,10 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('node:path');
 const { leerTrailerflix, guardarTrailerflix } = require('./database/trailerflix.manager');
 
 const app = express();
-app.set('view engine', 'ejs');
 const PORT = process.env.PORT || 3008;
 
 let CATALOGO = [];
@@ -17,44 +17,43 @@ app.use((req, res, next) => {
 });
 
 
-// 1. Función genérica de búsqueda
+// 1. Normaliza texto: minúsculas y sin tildes, para comparar "Pelicula" con "Película"
+function normalizar(texto) {
+  return texto
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+// 2. Función genérica de búsqueda
 function buscarEnCatalogo(propiedad, datoABuscar) {
-  const termino = datoABuscar.toLowerCase();
+  const termino = normalizar(datoABuscar);
 
   return CATALOGO.filter(item => {
     const valorPropiedad = item[propiedad];
-    
+
     if (!valorPropiedad) return false;
 
     if (Array.isArray(valorPropiedad)) {
-      return valorPropiedad.some(elemento => 
-        elemento.toLowerCase().includes(termino)
+      return valorPropiedad.some(elemento =>
+        normalizar(elemento).includes(termino)
       );
     }
 
-    return valorPropiedad.toLowerCase().includes(termino);
+    return normalizar(valorPropiedad).includes(termino);
   });
 }
 
 app.get('/', (req, res) => {
-  res.status(200).json({
-    mensaje: 'Bienvenido a la API de TrailerFlix',
-    totalRegistros: CATALOGO.length,
-  });
+  res.sendFile(path.join(__dirname, 'views', 'inicio.html'));
 });
 
 app.get('/catalogo', (req, res) => {
-  let catalogoOrdenado = [...CATALOGO].sort((a, b) =>
-    a.title.localeCompare(b.title)
-  );
-  res.render('catalogo', {
-    titulo: 'Catálogo de Películas',
-    catalogo: catalogoOrdenado,
-  });
+  res.status(200).json(CATALOGO);
 });
 
-app.get('/catalogo/titulo/:title', (req, res) => {
-  const titulosEncontrados = buscarEnCatalogo("title", req.params.title);
+app.get('/titulo/:title', (req, res) => {
+  const titulosEncontrados = buscarEnCatalogo("titulo", req.params.title);
 
   if (titulosEncontrados.length > 0) {
     console.log(`Se encontraron ${titulosEncontrados.length} títulos que contengan: ${req.params.title}`);
@@ -85,7 +84,7 @@ app.get('/categoria/:cat', (req, res) => {
 app.get('/reparto/:act', (req, res) => {
   const datosAux = buscarEnCatalogo("reparto", req.params.act);
   const datosEncontrados = datosAux.map(pelicula => ({
-    titulo: pelicula.title,
+    titulo: pelicula.titulo,
     reparto: pelicula.reparto
   }));
 
@@ -102,14 +101,14 @@ app.get('/reparto/:act', (req, res) => {
 
 
 app.get('/trailer/:id', (req, res) => {
-  const idBuscado = req.params.id;
+  const idBuscado = Number(req.params.id);
 
-  const peliculaEncontrada = CATALOGO.find(item => item.id == idBuscado);
+  const peliculaEncontrada = CATALOGO.find(item => item.id === idBuscado);
 
   if (peliculaEncontrada) {
     const resultado = {
       id: peliculaEncontrada.id,
-      titulo: peliculaEncontrada.title, 
+      titulo: peliculaEncontrada.titulo,
       trailer: peliculaEncontrada?.trailer || `El trailer no se encuentra disponible para esta película/serie.`
     };
 

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trailerflix API</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; color: #333; }
+    h1 { color: #e50914; }
+    ul { line-height: 1.8; }
+    code { background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <h1>Bienvenido a la API de TrailerFlix</h1>
+  <p>Catálogo de películas y series disponible en <strong>30</strong> registros.</p>
+  <h2>Endpoints disponibles</h2>
+  <ul>
+    <li><code>GET /catalogo</code> - lista todo el contenido</li>
+    <li><code>GET /titulo/:title</code> - busca por título (parcial)</li>
+    <li><code>GET /categoria/:cat</code> - busca por categoría (serie o película)</li>
+    <li><code>GET /reparto/:act</code> - busca por actor o actriz (parcial)</li>
+    <li><code>GET /trailer/:id</code> - devuelve la URL del tráiler</li>
+  </ul>
+</body>
+</html>
