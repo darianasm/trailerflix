@@ -1,37 +1,23 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= titulo %></title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; color: #333; }
-        h1 { color: #e50914; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .card h3 { margin-top: 0; }
-        .badge { background: #e50914; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; }
-    </style>
-</head>
-<body>
+<%- include('partials/cabecera', { titulo: 'Catálogo' }) %>
 
-    <h1><%= titulo %></h1>
-    <p>Total de títulos: <strong><%= catalogo.length %></strong></p>
+<main class="container py-5 flex-grow-1">
 
-    <div class="grid">
-        <% catalogo.forEach(pelicula => { %>
-            <div class="card">
-                <span class="badge"><%= pelicula.categoria %></span>
-                <h3><%= pelicula.title %></h3>
-                <p><strong>Reparto:</strong> <%= Array.isArray(pelicula.reparto) ? pelicula.reparto.join(', ') : pelicula.reparto %></p>
-                <% if (pelicula.trailer) { %>
-                    <a href="<%= pelicula.trailer %>" target="_blank">Ver Tráiler</a>
-                <% } else { %>
-                    <small style="color: gray;">Sin tráiler disponible</small>
-                <% } %>
-            </div>
-        <% }) %>
-    </div>
+  <%- include('partials/endpoint', { ruta: '/catalogo', json: '/api/catalogo' }) %>
 
-</body>
-</html>
+  <%- include('partials/titulo', { texto: 'Catálogo completo' }) %>
+
+  <p class="text-secondary mb-4">
+    <strong class="text-white"><%= total %></strong> títulos entre películas y series.
+  </p>
+
+  <div class="row g-4">
+    <% resultados.forEach(item => { %>
+      <div class="col-12 col-sm-6 col-lg-4">
+        <%- include('partials/tarjeta', { item }) %>
+      </div>
+    <% }) %>
+  </div>
+
+</main>
+
+<%- include('partials/pie') %>

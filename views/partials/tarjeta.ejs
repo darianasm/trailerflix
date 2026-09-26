@@ -1,0 +1,35 @@
+<div class="card tf-card h-100 border-secondary-subtle">
+  <div class="card-body d-flex flex-column">
+    <% if (item.categoria) { %>
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+        <span class="badge tf-categoria"><%= item.categoria %></span>
+        <% if (item.temporadas && item.temporadas !== 'N/A') { %>
+          <span class="small text-secondary"><%= item.temporadas %> temporadas</span>
+        <% } %>
+      </div>
+    <% } %>
+
+    <h2 class="h5 text-white mb-1"><%= item.titulo %></h2>
+
+    <% if (item.genero) { %>
+      <p class="small text-secondary mb-2"><%= item.genero %></p>
+    <% } %>
+
+    <% if (item.sinopsis) { %>
+      <p class="card-text small text-secondary"><%= item.sinopsis %></p>
+    <% } %>
+
+    <% if (item.reparto) { %>
+      <p class="small text-secondary mb-2">
+        <span class="text-white-50">Reparto:</span>
+        <%= Array.isArray(item.reparto) ? item.reparto.join(', ') : item.reparto %>
+      </p>
+    <% } %>
+
+    <% if (item.trailer) { %>
+      <a href="<%= item.trailer %>" target="_blank" rel="noopener noreferrer" class="small text-white mt-auto">
+        Ver tráiler &rarr;
+      </a>
+    <% } %>
+  </div>
+</div>
