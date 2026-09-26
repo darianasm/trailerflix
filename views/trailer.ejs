@@ -1,0 +1,77 @@
+<%- include('partials/cabecera', { titulo: item ? item.titulo : 'Tráiler no encontrado' }) %>
+
+<main class="container py-5 flex-grow-1">
+
+  <%- include('partials/endpoint', { ruta: '/trailer/:id', json }) %>
+
+  <% if (!item) { %>
+
+    <div class="py-5 text-center">
+      <%- include('partials/titulo', { texto: 'Elemento no encontrado', centrado: true }) %>
+
+      <p class="text-secondary mb-4">
+        No existe ningún título con el id <code class="tf-route text-white-50"><%= id %></code>.
+      </p>
+
+      <a href="/catalogo" class="btn btn-outline-light btn-sm">Ver el catálogo completo</a>
+    </div>
+
+  <% } else { %>
+
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-8">
+
+        <div class="card tf-card border-secondary-subtle">
+          <div class="card-body p-4">
+
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+              <span class="badge tf-categoria"><%= item.categoria %></span>
+              <span class="badge tf-categoria">ID <%= item.id %></span>
+              <% if (item.temporadas && item.temporadas !== 'N/A') { %>
+                <span class="badge tf-categoria"><%= item.temporadas %> temporadas</span>
+              <% } %>
+            </div>
+
+            <%- include('partials/titulo', { texto: item.titulo }) %>
+
+            <% if (item.genero) { %>
+              <p class="text-secondary mb-3"><%= item.genero %></p>
+            <% } %>
+
+            <% if (item.sinopsis) { %>
+              <p class="text-secondary"><%= item.sinopsis %></p>
+            <% } %>
+
+            <% if (item.reparto) { %>
+              <p class="small text-secondary">
+                <span class="text-white-50">Reparto:</span>
+                <%= Array.isArray(item.reparto) ? item.reparto.join(', ') : item.reparto %>
+              </p>
+            <% } %>
+
+            <hr class="border-secondary-subtle">
+
+            <% if (item.trailer) { %>
+              <a href="<%= item.trailer %>" target="_blank" rel="noopener noreferrer"
+                class="btn btn-danger btn-sm text-white">
+                Ver tráiler &rarr;
+              </a>
+            <% } else { %>
+              <p class="small text-secondary mb-0">
+                El tráiler no se encuentra disponible para esta película/serie.
+              </p>
+            <% } %>
+
+          </div>
+        </div>
+
+        <a href="/catalogo" class="small text-secondary d-inline-block mt-4">&larr; Volver al catálogo</a>
+
+      </div>
+    </div>
+
+  <% } %>
+
+</main>
+
+<%- include('partials/pie') %>

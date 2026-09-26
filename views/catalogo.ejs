@@ -1,0 +1,23 @@
+<%- include('partials/cabecera', { titulo: 'Catálogo' }) %>
+
+<main class="container py-5 flex-grow-1">
+
+  <%- include('partials/endpoint', { ruta: '/catalogo', json: '/api/catalogo' }) %>
+
+  <%- include('partials/titulo', { texto: 'Catálogo completo' }) %>
+
+  <p class="text-secondary mb-4">
+    <strong class="text-white"><%= total %></strong> títulos entre películas y series.
+  </p>
+
+  <div class="row g-4">
+    <% resultados.forEach(item => { %>
+      <div class="col-12 col-sm-6 col-lg-4">
+        <%- include('partials/tarjeta', { item }) %>
+      </div>
+    <% }) %>
+  </div>
+
+</main>
+
+<%- include('partials/pie') %>

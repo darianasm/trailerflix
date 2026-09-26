@@ -1,0 +1,42 @@
+<%- include('partials/cabecera', { titulo: resumen }) %>
+
+<main class="container py-5 flex-grow-1">
+
+  <%- include('partials/endpoint', { ruta, json }) %>
+
+  <% if (resultados.length === 0) { %>
+
+    <div class="py-5">
+      <%- include('partials/titulo', { texto: 'Sin resultados', centrado: true }) %>
+
+      <p class="text-secondary text-center mb-4">
+        No se encontraron coincidencias para <code class="tf-route text-white-50"><%= termino %></code>.
+      </p>
+
+      <div class="text-center">
+        <a href="/catalogo" class="btn btn-outline-light btn-sm">Ver el catálogo completo</a>
+      </div>
+    </div>
+
+  <% } else { %>
+
+    <%- include('partials/titulo', { texto: resumen }) %>
+
+    <p class="text-secondary mb-4">
+      <strong class="text-white"><%= resultados.length %></strong>
+      <%= resultados.length === 1 ? 'coincidencia' : 'coincidencias' %>.
+    </p>
+
+    <div class="row g-4">
+      <% resultados.forEach(item => { %>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <%- include('partials/tarjeta', { item }) %>
+        </div>
+      <% }) %>
+    </div>
+
+  <% } %>
+
+</main>
+
+<%- include('partials/pie') %>
