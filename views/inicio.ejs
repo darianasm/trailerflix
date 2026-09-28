@@ -1,0 +1,77 @@
+<%- include('partials/cabecera', { titulo: 'Inicio' }) %>
+
+<% 
+  const endpoints = [
+    {
+      metodo: 'GET',
+      ruta: '/catalogo',
+      ejemplo: '/catalogo',
+      descripcion: 'Devuelve el catálogo completo de películas y series.'
+    },
+    {
+      metodo: 'GET',
+      ruta: '/titulo/:title',
+      ejemplo: '/titulo/crown',
+      descripcion: 'Busca títulos que contengan el texto, sin distinguir mayúsculas, minúsculas ni tildes.'
+    },
+    {
+      metodo: 'GET',
+      ruta: '/categoria/:cat',
+      ejemplo: '/categoria/Serie',
+      descripcion: 'Filtra el catálogo por categoría: Serie o Película.'
+    },
+    {
+      metodo: 'GET',
+      ruta: '/reparto/:act',
+      ejemplo: '/reparto/Colman',
+      descripcion: 'Busca por actor o actriz dentro del reparto. Devuelve título y reparto.'
+    },
+    {
+      metodo: 'GET',
+      ruta: '/trailer/:id',
+      ejemplo: '/trailer/1',
+      descripcion: 'Devuelve el título y la URL del tráiler del elemento con ese id.'
+    }
+  ];
+%>
+
+<main class="container py-5 flex-grow-1">
+
+  <section class="mb-5">
+    <h1 class="h3 text-white mb-3">Bienvenido a la API de TrailerFlix</h1>
+    <p class="text-secondary col-lg-9 mb-3">
+      Catálogo de películas y series con <strong class="text-white"><%= total %></strong> registros.
+      Todos los endpoints son <strong class="text-white">GET</strong>, no requieren autenticación y no aceptan
+      parámetros obligatorios. Pulsa cualquier tarjeta para abrir la vista del endpoint; si no hay coincidencias,
+      la API responde <strong class="text-white">404</strong> con un mensaje descriptivo.
+    </p>
+    <p class="small text-secondary mb-0">
+      Las mismas rutas responden <strong class="text-white">JSON</strong> bajo el prefijo
+      <code class="tf-route text-white-50">/api</code>, por ejemplo
+      <a href="/api/catalogo" class="text-white">/api/catalogo</a>.
+    </p>
+  </section>
+
+  <section class="row g-4">
+    <% endpoints.forEach(endpoint => { %>
+      <div class="col-12 col-md-6 col-lg-4">
+        <a href="<%= endpoint.ejemplo %>" class="text-decoration-none d-block h-100"
+          aria-label="<%= endpoint.metodo %> <%= endpoint.ruta %>">
+          <div class="card tf-card tf-card-link h-100 border-secondary-subtle">
+            <div class="card-body d-flex flex-column">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <span class="badge tf-method"><%= endpoint.metodo %></span>
+                <code class="tf-route small text-white-50"><%= endpoint.ruta %></code>
+              </div>
+              <p class="card-text text-secondary flex-grow-1"><%= endpoint.descripcion %></p>
+              <p class="tf-cta small text-white mb-0">Abrir endpoint &rarr;</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% }) %>
+  </section>
+
+</main>
+
+<%- include('partials/pie') %>
